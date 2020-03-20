@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, RelationId } from 'typeorm'
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, RelationId, OneToMany } from 'typeorm'
 import { User } from '../user/user.entity'
 import { Cart } from 'src/cart/cart.entity';
 // import { ApiProperty } from '@nestjs/swagger'
@@ -17,11 +17,14 @@ export class Product {
   @Column({ type: 'character varying' })
   description: string;
 
-  @ManyToOne(type => Cart, cart => cart.products)
-  cart: Cart;
+  @ManyToOne(type => User, user => user.products)
+  user: User;
 
-// //   @ApiProperty()
-//   @Column({ type: 'character varying' })
-//   @RelationId((product: Product) => product.user)
-//   userId: string;
+//   @ApiProperty()
+  @Column({ type: 'character varying' })
+  @RelationId((product: Product) => product.user)
+  userId: string;
+
+  @OneToMany(type => Cart, cart => cart.user, { eager: true })
+  carts: Cart[];
 }
